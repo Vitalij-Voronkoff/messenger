@@ -9,15 +9,15 @@ public class Message {
     private long id;
     private String message;
     private Date created;
-    private String autor;
+    private String author;
 
     public Message() {
     }
 
-    public Message(long id, String message, String autor) {
+    public Message(long id, String message, String author) {
         this.id = id;
         this.message = message;
-        this.autor = autor;
+        this.author = author;
         this.created = new Date();
     }
 
@@ -45,11 +45,11 @@ public class Message {
         this.created = created;
     }
 
-    public String getAutor() {
-        return autor;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setAutor(String autor) {
-        this.autor = autor;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }
