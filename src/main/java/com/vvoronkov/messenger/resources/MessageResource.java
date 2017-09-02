@@ -12,7 +12,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class MessageResource {
 
-    MessageService messageService = new MessageService();
+    private MessageService messageService = new MessageService();
 
     @GET
     public List<Message> getMessages(){
