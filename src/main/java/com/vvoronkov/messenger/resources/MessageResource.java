@@ -1,6 +1,7 @@
 package com.vvoronkov.messenger.resources;
 
 import com.vvoronkov.messenger.model.Message;
+import com.vvoronkov.messenger.resources.beans.MessageFilterBean;
 import com.vvoronkov.messenger.service.MessageService;
 
 import javax.ws.rs.*;
@@ -15,7 +16,13 @@ public class MessageResource {
     private MessageService messageService = new MessageService();
 
     @GET
-    public List<Message> getMessages(){
+    public List<Message> getMessages(@BeanParam MessageFilterBean messageFilterBean){
+        if (messageFilterBean.getYear() > 0){
+            return messageService.getAllMessagesFroYear(messageFilterBean.getYear());
+        }
+        if (messageFilterBean.getStart() > 0 && messageFilterBean.getSize() > 0){
+            return messageService.getAllMessagesPaginated(messageFilterBean.getStart(), messageFilterBean.getSize());
+        }
         return messageService.getAllMessages();
     }
 
@@ -42,5 +49,10 @@ public class MessageResource {
     @Path("/{messageId}")
     public void deleteMessage(@PathParam("messageId") long id){
         messageService.removeMessage(id);
+    }
+
+    @Path("/{messageId}/comments")
+    public CommentResource getCommentResource(){
+        return new CommentResource();
     }
 }
