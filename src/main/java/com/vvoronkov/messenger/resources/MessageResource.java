@@ -21,7 +21,20 @@ public class MessageResource {
     private MessageService messageService = new MessageService();
 
     @GET
-    public List<Message> getMessages(@BeanParam MessageFilterBean messageFilterBean) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Message> getJsonMessages(@BeanParam MessageFilterBean messageFilterBean) {
+        if (messageFilterBean.getYear() > 0) {
+            return messageService.getAllMessagesFroYear(messageFilterBean.getYear());
+        }
+        if (messageFilterBean.getStart() > 0 && messageFilterBean.getSize() > 0) {
+            return messageService.getAllMessagesPaginated(messageFilterBean.getStart(), messageFilterBean.getSize());
+        }
+        return messageService.getAllMessages();
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_XML)
+    public List<Message> getXmlMessages(@BeanParam MessageFilterBean messageFilterBean) {
         if (messageFilterBean.getYear() > 0) {
             return messageService.getAllMessagesFroYear(messageFilterBean.getYear());
         }
@@ -64,12 +77,12 @@ public class MessageResource {
 
     public String getUriForSelf(UriInfo uriInfo, Message message) {
         return uriInfo.getBaseUriBuilder().path(MessageResource.class)
-                    .path(Long.toString(message.getId()))
-                    .build()
-                    .toString();
+                .path(Long.toString(message.getId()))
+                .build()
+                .toString();
     }
 
-    public String getUriForProfile(UriInfo uriInfo, Message message){
+    public String getUriForProfile(UriInfo uriInfo, Message message) {
         return uriInfo.getBaseUriBuilder()
                 .path(ProfileResource.class)
                 .path(message.getAuthor())
